@@ -1,0 +1,79 @@
+@theme {
+    /* Font sizes */
+    --text-3xl: 32px;
+    --text-sm: 15px;
+    --text-xxs: 11px;
+
+    /* Letter Spacing */
+    --tracking-tight: -0.03em;
+
+    /* Colours */
+    --color-blue-950: #10141E;
+    --color-red-500: #FC4747;
+
+    /* Spacing */
+    --spacing-0: 0;
+    --spacing-100: 8px;
+    --spacing-200: 16px;
+    --spacing-300: 24px;
+    --spacing-400: 32px;
+    --spacing-500: 40px;
+    --spacing-700: 56px;
+    --spacing-900: 72px;
+    --spacing-1000: 80px;
+}
+
+@layer base {
+    body {
+        @apply text-black bg-white
+    }
+
+    h1 {
+        @apply text-xl leading-tight tracking-tight font-light;
+        @apply md:text-3xl  md:tracking-tighter p-[var(--spacing-500)]
+
+    }
+
+    h2 {
+        @apply text-base leading-tight  font-light;
+        @apply md:text-2xl md:font-medium
+    }
+
+    h3 {
+        @apply text-xl
+    }
+
+    p, li, a {
+        @apply text-lg p-[var(--spacing-400)] text-red-500
+    }
+
+    a {
+        @apply text-red-500
+    }
+
+    button {
+        @apply rounded px-4 py-2 font-medium bg-red-500 text-white;
+    }
+}
+
+@layer components {
+    .text-preset-1 {
+        @apply text-xl leading-tight tracking-tight font-light;
+        @apply md:text-3xl  md:tracking-tighter
+    }
+
+    .text-preset-2-md {
+        @apply text-base leading-tight  font-light;
+        @apply md:text-2xl md:font-medium
+    }
+
+    .text-preset-2-light {
+        @apply text-base leading-tight  font-light;
+        @apply md:text-2xl
+    }
+
+    .text-preset-3 {
+        @apply text-sm leading-tight  font-medium;
+        @apply md:text-lg
+    }
+}
