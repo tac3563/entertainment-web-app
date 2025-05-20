@@ -1,7 +1,8 @@
 @theme {
     /* Font sizes */
     --text-3xl: 32px;
-    --text-sm: 15px;
+    --text-sm-base: 15px;
+    --text-xs-base: 13px;
     --text-xxs: 11px;
 
     /* Letter Spacing */
@@ -9,6 +10,8 @@
 
     /* Colours */
     --color-blue-950: #10141E;
+    --color-blue-900: #161D2F;
+    --color-blue-500: #5A698FF;
     --color-red-500: #FC4747;
 
     /* Spacing */
@@ -25,13 +28,13 @@
 
 @layer base {
     body {
-        @apply text-black bg-white
+        font-family: 'Outfit', sans-serif;
+        @apply text-black bg-white;
     }
 
     h1 {
         @apply text-xl leading-tight tracking-tight font-light;
         @apply md:text-3xl  md:tracking-tighter p-[var(--spacing-500)]
-
     }
 
     h2 {
@@ -63,17 +66,35 @@
     }
 
     .text-preset-2-md {
-        @apply text-base leading-tight  font-light;
+        @apply text-base leading-tight font-light;
         @apply md:text-2xl md:font-medium
     }
 
     .text-preset-2-light {
-        @apply text-base leading-tight  font-light;
+        @apply text-base leading-tight font-light;
         @apply md:text-2xl
     }
 
     .text-preset-3 {
-        @apply text-sm leading-tight  font-medium;
+        @apply text-sm-base leading-tight  font-medium;
         @apply md:text-lg
+    }
+
+    .text-preset-4 {
+        @apply text-sm-base leading-tight font-medium;
+        @apply md:text-sm-base md:font-light
+    }
+
+    .text-preset-5 {
+        @apply text-xs leading-tight font-light;
+        @apply md:text-xs-base
+    }
+
+    .btn-primary {
+        @apply bg-red-500 text-white rounded-md
+    }
+
+    .btn-secondary {
+        @apply bg-white text-blue-900 rounded-md
     }
 }

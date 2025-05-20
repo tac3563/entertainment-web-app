@@ -2,4 +2,4 @@
 
 @import "tailwindcss";
 
-@import '../src/assets/styles/_typography.css';
+@import './styles/_theme.css';
