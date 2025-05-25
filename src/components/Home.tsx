@@ -1,5 +1,6 @@
 import Search from "./Search.tsx";
 import NavBar from "./Navbar.tsx";
+import MediaGrid from "../MediaGrid.tsx";
 
 export default function Home() {
     return (
@@ -7,7 +8,9 @@ export default function Home() {
             <aside><NavBar/></aside>
             <main className="max-w-screen-xl w-full">
                 <Search/>
-                <section>{/* Grid */}</section>
+                <section>
+                    <MediaGrid pageTitle='Home'/>
+                </section>
             </main>
         </>
     );

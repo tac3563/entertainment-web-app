@@ -1,10 +1,10 @@
-import avatar from '../assets/images/image-avatar.png'
+import avatar from '../../public/assets/images/image-avatar.png'
 
 export default function NavBar() {
     return (
         <>
             <nav
-                className="flex-center md:flex-col gap-[var(--spacing-900)] py-[var(--spacing-400)] mb-[var(--spacing-400)] h-full bg-blue-900 rounded-[var(--rounded-3xl)]">
+                className="flex-center md:flex-col gap-[var(--spacing-900)] py-[var(--spacing-400)] px-[var(--spacing-300)] mb-[var(--spacing-400)] h-full bg-blue-900 rounded-[var(--rounded-3xl)]">
                 <div>
                     <svg width="33" height="27" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -52,7 +52,7 @@ export default function NavBar() {
                     </li>
                 </ul>
                 <div className="md:mt-auto">
-                    <img className="w-8 h-8 md:h-10" src={avatar} alt=""/>
+                    <img className="w-10 h-10" src={avatar} alt=""/>
                 </div>
             </nav>
 
