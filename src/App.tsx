@@ -1,4 +1,3 @@
-import "./App.css";
 import PageLayout from "./components/PageLayout.tsx";
 import Home from "./components/Home.tsx";
 

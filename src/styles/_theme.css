@@ -24,12 +24,18 @@
     --spacing-700: 56px;
     --spacing-900: 72px;
     --spacing-1000: 80px;
+
+    /* Container Widths */
+    --max-w-7xl: 1440px;
+
+    /* Border */
+    --rounded-3xl: 20px
 }
 
 @layer base {
     body {
         font-family: 'Outfit', sans-serif;
-        @apply text-black bg-white;
+        @apply text-white bg-blue-950 px-[var(--spacing-400)] pt-[var(--spacing-400)];
     }
 
     h1 {
@@ -47,7 +53,7 @@
     }
 
     p, li, a {
-        @apply text-lg p-[var(--spacing-400)] text-red-500
+        @apply text-lg
     }
 
     a {
@@ -96,5 +102,13 @@
 
     .btn-secondary {
         @apply bg-white text-blue-900 rounded-md
+    }
+}
+
+@layer utilities {
+    .flex-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }
