@@ -7,7 +7,7 @@ export default function Home() {
     return (
         <>
             <aside><NavBar/></aside>
-            <main className="max-w-screen-xl w-full">
+            <main className="w-full">
                 <Search/>
                 <section>
                     <Routes>
@@ -18,7 +18,7 @@ export default function Home() {
                             <MediaGrid pageTitle='Movies'/>
                         }/>
                         <Route path='/tv-shows' element={
-                            <MediaGrid pageTitle='TV shows'/>
+                            <MediaGrid pageTitle='TV Series'/>
                         }/>
                         <Route path='/bookmarked' element={
                             <MediaGrid pageTitle='Bookmarked'/>
