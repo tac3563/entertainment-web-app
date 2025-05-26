@@ -13,6 +13,7 @@
     --color-blue-900: #161D2F;
     --color-blue-500: #5A698FF;
     --color-red-500: #FC4747;
+    --color-blue-500-50: rgba(22, 29, 47, 0.5);
 
     /* Spacing */
     --spacing-0: 0;
