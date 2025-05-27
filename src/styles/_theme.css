@@ -30,7 +30,10 @@
     --max-w-7xl: 1440px;
 
     /* Border */
-    --rounded-3xl: 20px
+    --rounded-3xl: 20px;
+
+    /* Element Widths */
+    --carousel-max-width: 470px;
 }
 
 @layer base {
@@ -45,8 +48,8 @@
     }
 
     h2 {
-        @apply text-base leading-tight font-light;
-        @apply md:text-2xl md:font-medium
+        @apply text-xl leading-tight tracking-tight font-light;
+        @apply md:text-3xl  md:tracking-tighter py-[var(--spacing-500)]
     }
 
     h3 {
@@ -112,5 +115,11 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    .ratio-carousel {
+        aspect-ratio: 470/230;
+        object-fit: cover;
+        object-position: center;
     }
 }
