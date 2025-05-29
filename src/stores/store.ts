@@ -1,4 +1,5 @@
 import { create } from "zustand/react";
+import React from "react";
 import mediaItemsData from "../data/data.json";
 
 type MediaItem = {
@@ -23,11 +24,18 @@ type MediaItem = {
 
 type StoreState = {
   mediaItems: MediaItem[];
+  searchInput: string;
+  updateSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
   toggleBookmark: (title: string) => void;
 };
 
 const useStore = create<StoreState>((set) => ({
   mediaItems: mediaItemsData as MediaItem[],
+  searchInput: "",
+  updateSearch: (event) =>
+    set(() => ({
+      searchInput: event.target.value,
+    })),
   toggleBookmark: (title) =>
     set((state) => ({
       mediaItems: state.mediaItems.map((item) =>
