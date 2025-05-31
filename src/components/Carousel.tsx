@@ -8,9 +8,10 @@ export default function Carousel() {
   const trendingItems = mediaItems.filter((item) => item.isTrending);
 
   const listRef = useRef<HTMLUListElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const [inputMethod, setInputMethod] = useState<"mouse" | "keyboard">("mouse");
 
-  // Accessibility: prevents mouse hover interfering with keyboard navigation:
+  // Accessibility: toggle input method detection
   useEffect(() => {
     const handleKeyDown = () => setInputMethod("keyboard");
     const handleMouseDown = () => setInputMethod("mouse");
@@ -22,6 +23,19 @@ export default function Carousel() {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("mousedown", handleMouseDown);
     };
+  }, []);
+
+  // Programmatically set height of carousel on container as it is now absolutely positioned to handle overflow correctly
+  useEffect(() => {
+    const updateHeight = () => {
+      if (listRef.current && wrapperRef.current) {
+        wrapperRef.current.style.height = `${listRef.current.offsetHeight}px`;
+      }
+    };
+
+    updateHeight();
+    window.addEventListener("resize", updateHeight);
+    return () => window.removeEventListener("resize", updateHeight);
   }, []);
 
   const scrollToCenter = (index: number) => {
@@ -44,47 +58,49 @@ export default function Carousel() {
   return (
     <>
       <h2>Trending</h2>
-      <ul
-        className="hide-scrollbar flex gap-[var(--spacing-500)] overflow-x-auto scroll-smooth"
-        ref={listRef}
-        tabIndex={0}
-      >
-        {trendingItems.map((item, index) => (
-          <motion.li
-            key={`trending-item-${index}`}
-            className="relative w-[var(--carousel-max-width)] flex-shrink-0"
-            onMouseEnter={() => {
-              if (inputMethod === "mouse") {
-                scrollToCenter(index);
-              }
-            }}
-          >
-            <img
-              className="ratio-carousel max-w-none rounded-lg w-[var(--carousel-max-width)] h-auto "
-              src={item.thumbnail.trending.large}
-              srcSet={`
-                               ${item.thumbnail.trending.small}  480w,
-                                ${item.thumbnail.trending.large}
-                               `}
-              alt={item.title}
-            />
+      <div className="relative w-full" ref={wrapperRef}>
+        <ul
+          className="absolute left-0 right-0 -mx-[var(--spacing-400)] hide-scrollbar flex gap-[var(--spacing-500)] overflow-x-auto scroll-smooth px-[var(--spacing-400)]"
+          ref={listRef}
+          tabIndex={0}
+        >
+          {trendingItems.map((item, index) => (
+            <motion.li
+              key={`trending-item-${index}`}
+              className="relative w-[var(--carousel-max-width)] flex-shrink-0"
+              onMouseEnter={() => {
+                if (inputMethod === "mouse") {
+                  scrollToCenter(index);
+                }
+              }}
+            >
+              <img
+                className="ratio-carousel max-w-none rounded-lg w-[var(--carousel-max-width-mobile)] md:w-[var(--carousel-max-width)] h-auto"
+                src={item.thumbnail.trending.large}
+                srcSet={`
+                  ${item.thumbnail.trending.small} 480w,
+                  ${item.thumbnail.trending.large}
+                `}
+                alt={item.title}
+              />
 
-            <div className="absolute bottom-6 left-6 flex flex-col ">
-              <div className="opacity-75 py-[var(--spacing-100)] flex gap-[var(--spacing-100)]">
-                <p className="text-preset-5">{item.year}</p>
-                <p className="text-preset-5">{item.category}</p>
-                <p className="text-preset-5">{item.rating}</p>
+              <div className="absolute bottom-6 left-6 flex flex-col">
+                <div className="opacity-75 py-[var(--spacing-100)] flex gap-[var(--spacing-100)]">
+                  <p className="text-preset-5">{item.year}</p>
+                  <p className="text-preset-5">{item.category}</p>
+                  <p className="text-preset-5">{item.rating}</p>
+                </div>
+                <h3>{item.title}</h3>
               </div>
-              <h3>{item.title}</h3>
-            </div>
-            <BookmarkIcon
-              title={item.title}
-              isBookmarked={item.isBookmarked}
-              toggleBookmark={toggleBookmark}
-            />
-          </motion.li>
-        ))}
-      </ul>
+              <BookmarkIcon
+                title={item.title}
+                isBookmarked={item.isBookmarked}
+                toggleBookmark={toggleBookmark}
+              />
+            </motion.li>
+          ))}
+        </ul>
+      </div>
     </>
   );
 }

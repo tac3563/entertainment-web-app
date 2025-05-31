@@ -33,6 +33,7 @@
     --rounded-3xl: 20px;
 
     /* Element Widths */
+    --carousel-max-width-mobile: 359px;
     --carousel-max-width: 470px;
 }
 
