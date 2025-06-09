@@ -30,7 +30,12 @@ export default function Home() {
             />
             <Route
               path="/bookmarked"
-              element={<MediaGrid pageTitle="Bookmarked" />}
+              element={
+                <>
+                  <MediaGrid pageTitle="Bookmarked Movies" />
+                  <MediaGrid pageTitle="Bookmarked TV Series" />
+                </>
+              }
             />
           </Routes>
         </section>

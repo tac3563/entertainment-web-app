@@ -14,8 +14,14 @@ export default function MediaGrid({ pageTitle }: MediaGridProps) {
         return mediaItems.filter((item) => item.category === "Movie");
       case "TV Series":
         return mediaItems.filter((item) => item.category === "TV Series");
-      case "Bookmarked":
-        return mediaItems.filter((item) => item.isBookmarked);
+      case "Bookmarked Movies":
+        return mediaItems.filter(
+          (item) => item.isBookmarked && item.category === "Movie",
+        );
+      case "Bookmarked TV Series":
+        return mediaItems.filter(
+          (item) => item.isBookmarked && item.category === "TV Series",
+        );
       case "Recommended for you":
         return [...mediaItems].slice(0, 8);
       default:
