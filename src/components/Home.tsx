@@ -2,11 +2,13 @@ import Search from "./Search.tsx";
 import NavBar from "./Navbar.tsx";
 import MediaGrid from "../MediaGrid.tsx";
 import Carousel from "./Carousel.tsx";
+import Auth from "./Auth.tsx";
 import { Routes, Route } from "react-router-dom";
 
 export default function Home() {
   return (
     <>
+      <Auth authType={"Auth"} />
       <aside>
         <NavBar />
       </aside>

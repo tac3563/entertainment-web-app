@@ -11,7 +11,7 @@
     /* Colours */
     --color-blue-950: #10141E;
     --color-blue-900: #161D2F;
-    --color-blue-500: #5A698FF;
+    --color-blue-500: #5A698F;
     --color-red-500: #FC4747;
     --color-blue-500-50: rgba(22, 29, 47, 0.5);
 
@@ -22,6 +22,7 @@
     --spacing-300: 24px;
     --spacing-400: 32px;
     --spacing-500: 40px;
+    --spacing-600: 48px;
     --spacing-700: 56px;
     --spacing-900: 72px;
     --spacing-1000: 80px;
@@ -35,6 +36,7 @@
     /* Element Widths */
     --carousel-max-width-mobile: 359px;
     --carousel-max-width: 470px;
+    --modal-max-width: 400px;
 }
 
 @layer base {
