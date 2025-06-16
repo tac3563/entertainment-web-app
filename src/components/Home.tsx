@@ -3,12 +3,24 @@ import NavBar from "./Navbar.tsx";
 import MediaGrid from "../MediaGrid.tsx";
 import Carousel from "./Carousel.tsx";
 import Auth from "./Auth.tsx";
+import useAuthStore from "../stores/authStore.ts";
 import { Routes, Route } from "react-router-dom";
+import { useState } from "react";
+
+type AuthType = "Login" | "Sign up";
+type handleAuthType = () => void;
 
 export default function Home() {
+  const { userIsAuthenticated } = useAuthStore();
+  const [authType, setAuthType] = useState<AuthType>("Login");
+  const handleAuthType: handleAuthType = () => {
+    setAuthType((prev) => (prev === "Login" ? "Sign up" : "Login"));
+  };
   return (
     <>
-      <Auth authType={"Auth"} />
+      {!userIsAuthenticated && (
+        <Auth authType={authType} handleAuthType={handleAuthType} />
+      )}
       <aside>
         <NavBar />
       </aside>

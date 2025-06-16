@@ -1,6 +1,9 @@
 import { NavLink } from "react-router-dom";
+import useAuthStore from "../stores/authStore.ts";
 
 export default function NavBar() {
+  const { logout } = useAuthStore();
+
   return (
     <>
       <nav className="flex-center md:flex-col gap-[var(--spacing-900)] py-[var(--spacing-400)] px-[var(--spacing-300)] mb-[var(--spacing-400)] h-full bg-blue-900 rounded-[var(--rounded-3xl)]">
@@ -62,6 +65,13 @@ export default function NavBar() {
             alt=""
           />
         </div>
+        <a
+          className="text-center font-bold text-[var(--color-blue-500)]"
+          onClick={logout}
+          href="#"
+        >
+          Sign Out
+        </a>
       </nav>
     </>
   );
