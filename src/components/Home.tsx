@@ -5,7 +5,8 @@ import Carousel from "./Carousel.tsx";
 import Auth from "./Auth.tsx";
 import useAuthStore from "../stores/authStore.ts";
 import { Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchMediaItems } from "../api/tmdb.ts";
 
 type AuthType = "Login" | "Sign up";
 type handleAuthType = () => void;
@@ -16,6 +17,11 @@ export default function Home() {
   const handleAuthType: handleAuthType = () => {
     setAuthType((prev) => (prev === "Login" ? "Sign up" : "Login"));
   };
+
+  useEffect(() => {
+    fetchMediaItems();
+  });
+
   return (
     <>
       {!userIsAuthenticated && (
