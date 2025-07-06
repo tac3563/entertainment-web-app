@@ -1,6 +1,6 @@
 import { create } from "zustand/react";
 import React from "react";
-import mediaItemsData from "../data/data.json";
+import { fetchMediaItems } from "../api/tmdb";
 
 type MediaItem = {
   title: string;
@@ -27,10 +27,11 @@ type StoreState = {
   searchInput: string;
   updateSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
   toggleBookmark: (title: string) => void;
+  fetchAndSetMediaItems: () => Promise<void>;
 };
 
 const useStore = create<StoreState>((set) => ({
-  mediaItems: mediaItemsData as MediaItem[],
+  mediaItems: [],
   searchInput: "",
   updateSearch: (event) =>
     set(() => ({
@@ -44,6 +45,10 @@ const useStore = create<StoreState>((set) => ({
           : item,
       ),
     })),
+  fetchAndSetMediaItems: async () => {
+    const items = await fetchMediaItems();
+    set({ mediaItems: items });
+  },
 }));
 
 export default useStore;

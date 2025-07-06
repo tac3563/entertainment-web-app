@@ -4,9 +4,9 @@ import MediaGrid from "../MediaGrid.tsx";
 import Carousel from "./Carousel.tsx";
 import Auth from "./Auth.tsx";
 import useAuthStore from "../stores/authStore.ts";
+import useStore from "../stores/store.ts";
 import { Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchMediaItems } from "../api/tmdb.ts";
 
 type AuthType = "Login" | "Sign up";
 type handleAuthType = () => void;
@@ -18,9 +18,13 @@ export default function Home() {
     setAuthType((prev) => (prev === "Login" ? "Sign up" : "Login"));
   };
 
+  const fetchAndSetMediaItems = useStore(
+    (state) => state.fetchAndSetMediaItems,
+  );
+
   useEffect(() => {
-    fetchMediaItems();
-  });
+    fetchAndSetMediaItems();
+  }, [fetchAndSetMediaItems]);
 
   return (
     <>

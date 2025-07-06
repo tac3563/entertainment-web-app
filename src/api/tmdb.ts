@@ -15,12 +15,46 @@ export async function fetchMediaItems() {
       );
     }
 
-    const movies = await moviesRes.json();
-    const tv = await tvRes.json();
+    const moviesData = await moviesRes.json();
+    const tvData = await tvRes.json();
 
-    return console.log([movies, tv]);
+    const movies = moviesData.results.map((item) => ({
+      id: item.id,
+      title: item.title,
+      year: parseInt((item.release_date || "").slice(0, 4)),
+      category: "Movie",
+      rating: item.adult ? "18" : "PG",
+      isBookmarked: false,
+      thumbnail: {
+        regular: {
+          small: `https://image.tmdb.org/t/p/w300${item.poster_path}`,
+          medium: `https://image.tmdb.org/t/p/w500${item.poster_path}`,
+          large: `https://image.tmdb.org/t/p/original${item.poster_path}`,
+        },
+      },
+    }));
+
+    const tv = tvData.results.map((item) => ({
+      id: item.id,
+      title: item.name,
+      year: parseInt((item.first_air_date || "").slice(0, 4)),
+      category: "TV Series",
+      rating: item.vote_average?.toFixed(1) || "N/A",
+      isBookmarked: false,
+      thumbnail: {
+        regular: {
+          small: `https://image.tmdb.org/t/p/w300${item.poster_path}`,
+          medium: `https://image.tmdb.org/t/p/w500${item.poster_path}`,
+          large: `https://image.tmdb.org/t/p/original${item.poster_path}`,
+        },
+      },
+    }));
+    console.log(movies);
+    return [...movies, ...tv];
   } catch (error) {
     console.error("Error fetching media items:", error);
     return [];
   }
 }
+
+// Fetch trailers:
