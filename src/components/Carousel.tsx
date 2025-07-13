@@ -27,16 +27,19 @@ export default function Carousel() {
 
   // Programmatically set height of carousel on container as it is now absolutely positioned to handle overflow correctly
   useEffect(() => {
-    const updateHeight = () => {
-      if (listRef.current && wrapperRef.current) {
-        wrapperRef.current.style.height = `${listRef.current.offsetHeight}px`;
-      }
-    };
+    if (!listRef.current || !wrapperRef.current) return;
 
-    updateHeight();
-    window.addEventListener("resize", updateHeight);
-    return () => window.removeEventListener("resize", updateHeight);
-  }, []);
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        wrapperRef.current!.style.height = `${entry.contentRect.height}px`;
+      }
+    });
+
+    observer.observe(listRef.current);
+
+    return () => observer.disconnect();
+  }, [trendingItems]);
+
 
   const scrollToCenter = (index: number) => {
     const container = listRef.current;
@@ -76,10 +79,10 @@ export default function Carousel() {
             >
               <img
                 className="ratio-carousel max-w-none rounded-lg w-[var(--carousel-max-width-mobile)] md:w-[var(--carousel-max-width)] h-auto"
-                src={item.thumbnail.trending.large}
+                src={item.thumbnail.regular.large}
                 srcSet={`
-                  ${item.thumbnail.trending.small} 480w,
-                  ${item.thumbnail.trending.large}
+                  ${item.thumbnail.regular.medium} 480w,
+                  ${item.thumbnail.regular.large}
                 `}
                 alt={item.title}
               />

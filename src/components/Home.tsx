@@ -1,6 +1,6 @@
 import Search from "./Search.tsx";
 import NavBar from "./Navbar.tsx";
-import MediaGrid from "../MediaGrid.tsx";
+import MediaGrid from "./MediaGrid.tsx";
 import Carousel from "./Carousel.tsx";
 import Auth from "./Auth.tsx";
 import useAuthStore from "../stores/authStore.ts";

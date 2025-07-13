@@ -25,11 +25,12 @@ export async function fetchMediaItems() {
       category: "Movie",
       rating: item.adult ? "18" : "PG",
       isBookmarked: false,
+      isTrending: false,
       thumbnail: {
         regular: {
-          small: `https://image.tmdb.org/t/p/w300${item.poster_path}`,
-          medium: `https://image.tmdb.org/t/p/w500${item.poster_path}`,
-          large: `https://image.tmdb.org/t/p/original${item.poster_path}`,
+          small: `https://image.tmdb.org/t/p/w300${item.backdrop_path}`,
+          medium: `https://image.tmdb.org/t/p/w500${item.backdrop_path}`,
+          large: `https://image.tmdb.org/t/p/original${item.backdrop_path}`,
         },
       },
     }));
@@ -41,16 +42,25 @@ export async function fetchMediaItems() {
       category: "TV Series",
       rating: item.vote_average?.toFixed(1) || "N/A",
       isBookmarked: false,
+      isTrending: false,
       thumbnail: {
         regular: {
-          small: `https://image.tmdb.org/t/p/w300${item.poster_path}`,
-          medium: `https://image.tmdb.org/t/p/w500${item.poster_path}`,
-          large: `https://image.tmdb.org/t/p/original${item.poster_path}`,
+          small: `https://image.tmdb.org/t/p/w300${item.backdrop_path}`,
+          medium: `https://image.tmdb.org/t/p/w500${item.backdrop_path}`,
+          large: `https://image.tmdb.org/t/p/original${item.backdrop_path}`,
         },
       },
     }));
     console.log(movies);
-    return [...movies, ...tv];
+
+    const combined = [...movies, ...tv];
+    const sorted = combined.sort((a, b) => b.popularity - a.popularity);
+
+    sorted.forEach((item, index) => {
+      item.isTrending = index < 5;
+    });
+
+    return sorted;
   } catch (error) {
     console.error("Error fetching media items:", error);
     return [];

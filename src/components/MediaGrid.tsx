@@ -1,5 +1,5 @@
-import useStore from "./stores/store.ts";
-import MediaGridItem from "./components/MediaGridItem.tsx";
+import useStore from "../stores/store.ts";
+import MediaGridItem from "./MediaGridItem.tsx";
 
 type MediaGridProps = {
   pageTitle: string;
@@ -23,7 +23,7 @@ export default function MediaGrid({ pageTitle }: MediaGridProps) {
           (item) => item.isBookmarked && item.category === "TV Series",
         );
       case "Recommended for you":
-        return [...mediaItems].slice(0, 8);
+        return [...mediaItems].slice(6, 14);
       default:
         return mediaItems;
     }
