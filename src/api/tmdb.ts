@@ -1,6 +1,25 @@
 const BASE_URL = "https://api.themoviedb.org/3";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
+type TmdbMovie = {
+  id: number;
+  title: string;
+  release_date: string;
+  backdrop_path: string;
+  adult: boolean;
+  popularity: number;
+};
+
+type TmdbTV = {
+  id: number;
+  name: string;
+  first_air_date: string;
+  backdrop_path: string;
+  vote_average: number;
+  popularity: number;
+};
+
+
 // Fetch movies and tv shows:
 export async function fetchMediaItems() {
   try {
@@ -18,14 +37,15 @@ export async function fetchMediaItems() {
     const moviesData = await moviesRes.json();
     const tvData = await tvRes.json();
 
-    const movies = moviesData.results.map((item) => ({
+    const movies = (moviesData.results as TmdbMovie[]).map((item) => ({
       id: item.id,
       title: item.title,
       year: parseInt((item.release_date || "").slice(0, 4)),
-      category: "Movie",
+      category: "Movie" as const,
       rating: item.adult ? "18" : "PG",
       isBookmarked: false,
       isTrending: false,
+      popularity: item.popularity,
       thumbnail: {
         regular: {
           small: `https://image.tmdb.org/t/p/w300${item.backdrop_path}`,
@@ -35,14 +55,15 @@ export async function fetchMediaItems() {
       },
     }));
 
-    const tv = tvData.results.map((item) => ({
+    const tv  = (tvData.results as TmdbTV[]).map((item) => ({
       id: item.id,
       title: item.name,
       year: parseInt((item.first_air_date || "").slice(0, 4)),
-      category: "TV Series",
+      category: "TV Series" as const,
       rating: item.vote_average?.toFixed(1) || "N/A",
       isBookmarked: false,
       isTrending: false,
+      popularity: item.popularity,
       thumbnail: {
         regular: {
           small: `https://image.tmdb.org/t/p/w300${item.backdrop_path}`,
@@ -51,7 +72,6 @@ export async function fetchMediaItems() {
         },
       },
     }));
-    console.log(movies);
 
     const combined = [...movies, ...tv];
     const sorted = combined.sort((a, b) => b.popularity - a.popularity);

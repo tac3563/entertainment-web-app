@@ -12,8 +12,9 @@ type AuthType = "Login" | "Sign up";
 type handleAuthType = () => void;
 
 export default function Home() {
-  const { userIsAuthenticated } = useAuthStore();
+  const { userIsAuthenticated, user } = useAuthStore();
   const [authType, setAuthType] = useState<AuthType>("Login");
+  const { loading } = useAuthStore();
   const handleAuthType: handleAuthType = () => {
     setAuthType((prev) => (prev === "Login" ? "Sign up" : "Login"));
   };
@@ -22,9 +23,11 @@ export default function Home() {
     (state) => state.fetchAndSetMediaItems,
   );
 
-  useEffect(() => {
-    fetchAndSetMediaItems();
-  }, [fetchAndSetMediaItems]);
+    useEffect(() => {
+        if (!loading) {
+            fetchAndSetMediaItems(user?.uid);
+        }
+    }, [user, loading, fetchAndSetMediaItems]);
 
   return (
     <>

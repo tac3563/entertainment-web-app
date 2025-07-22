@@ -1,5 +1,6 @@
 import useStore from "../stores/store.ts";
 import MediaGridItem from "./MediaGridItem.tsx";
+import useAuthStore from "../stores/authStore.ts";
 
 type MediaGridProps = {
   pageTitle: string;
@@ -7,6 +8,9 @@ type MediaGridProps = {
 
 export default function MediaGrid({ pageTitle }: MediaGridProps) {
   const { mediaItems, toggleBookmark, searchInput } = useStore();
+  const {  user } = useAuthStore();
+
+  if(!user) return null;
 
   const filteredMediaItems = (() => {
     switch (pageTitle) {
@@ -44,15 +48,15 @@ export default function MediaGrid({ pageTitle }: MediaGridProps) {
         {searchInput
           ? searchResults.map((item) => (
               <MediaGridItem
-                key={item.title}
-                toggleBookmark={toggleBookmark}
+                  key={item.id}
+                  toggleBookmark={() => toggleBookmark(item.id, user?.uid)}
                 {...item}
               />
             ))
           : filteredMediaItems.map((item) => (
               <MediaGridItem
-                key={item.title}
-                toggleBookmark={toggleBookmark}
+                  key={item.id}
+                  toggleBookmark={() => toggleBookmark(item.id, user?.uid)}
                 {...item}
               />
             ))}
