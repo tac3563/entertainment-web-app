@@ -39,7 +39,7 @@ export default function MediaGrid({ pageTitle, items }: MediaGridProps) {
               ? `Found ${searchResults.length} results for '${searchInput}'`
               : pageTitle}
         </h2>
-        <ul className="py-[var(--spacing-400)] gap-x-[var(--spacing-500)] gap-y-[var(--spacing-300)] grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2">
+        <ul className="py-[var(--spacing-400)] md:gap-x-[var(--spacing-500)] gap-x-[var(--spacing-300)] gap-y-[var(--spacing-300)] grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2">
           <AnimatePresence>
             {itemsToShow.map((item) => (
                 <motion.li

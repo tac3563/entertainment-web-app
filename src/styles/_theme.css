@@ -71,6 +71,10 @@
     button {
         @apply rounded px-4 py-2 font-medium bg-red-500 text-white;
     }
+    
+    body {
+        @apply md:px-[var(--spacing-500)] px-[var(--spacing-200)]
+    }
 }
 
 @layer components {
@@ -136,6 +140,8 @@
     }
     
     .side-nav {
-        min-height: 95vh;
+        @media(min-width: 768px) {
+            min-height: 95vh;
+        }
     }
 }
