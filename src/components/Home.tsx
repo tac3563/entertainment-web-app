@@ -4,9 +4,9 @@ import MediaGrid from "./MediaGrid.tsx";
 import Carousel from "./Carousel.tsx";
 import Auth from "./Auth.tsx";
 import useAuthStore from "../stores/authStore.ts";
-import useStore from "../stores/store.ts";
 import { Routes, Route } from "react-router-dom";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
+import { useFetchMediaWithBookmarks } from "../hooks/useFetchMediaWithBookmarks";
 
 type AuthType = "Login" | "Sign up";
 type handleAuthType = () => void;
@@ -14,20 +14,11 @@ type handleAuthType = () => void;
 export default function Home() {
   const { userIsAuthenticated, user } = useAuthStore();
   const [authType, setAuthType] = useState<AuthType>("Login");
-  const { loading } = useAuthStore();
   const handleAuthType: handleAuthType = () => {
     setAuthType((prev) => (prev === "Login" ? "Sign up" : "Login"));
   };
 
-  const fetchAndSetMediaItems = useStore(
-    (state) => state.fetchAndSetMediaItems,
-  );
-
-    useEffect(() => {
-        if (!loading) {
-            fetchAndSetMediaItems(user?.uid);
-        }
-    }, [user, loading, fetchAndSetMediaItems]);
+  useFetchMediaWithBookmarks(user?.uid);
 
   return (
     <>

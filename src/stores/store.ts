@@ -1,11 +1,8 @@
 import { create } from "zustand/react";
 import React from "react";
-import { fetchMediaItems } from "../api/tmdb";
 import { db } from "../firebaseConfig";
 import {
   doc,
-  getDoc,
-  setDoc,
   updateDoc,
   arrayUnion,
   arrayRemove,
@@ -33,12 +30,13 @@ type StoreState = {
   searchInput: string;
   updateSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
   toggleBookmark: (itemId: number, userId: string) => Promise<void>;
-  fetchAndSetMediaItems: (userId?: string) => Promise<void>;
+  setMediaItems: (items: MediaItem[]) => void;
 };
 
 const useStore = create<StoreState>((set, get) => ({
   mediaItems: [],
   searchInput: "",
+  setMediaItems: (items: MediaItem[]) => set({ mediaItems: items }),
 
   updateSearch: (event) =>
       set({ searchInput: event.target.value }),
@@ -62,28 +60,6 @@ const useStore = create<StoreState>((set, get) => ({
           ? arrayRemove(itemId)
           : arrayUnion(itemId),
     });
-  },
-
-  fetchAndSetMediaItems: async (userId) => {
-    const items = await fetchMediaItems();
-    let bookmarkedIds: number[] = [];
-
-    if (userId) {
-      const ref = doc(db, "bookmarks", userId);
-      const snap = await getDoc(ref);
-      if (snap.exists()) {
-        bookmarkedIds = snap.data().mediaIds || [];
-      } else {
-        await setDoc(ref, { mediaIds: [] });
-      }
-    }
-
-    const merged = items.map((item) => ({
-      ...item,
-      isBookmarked: bookmarkedIds.includes(item.id),
-    }));
-
-    set({ mediaItems: merged });
   },
 }));
 
