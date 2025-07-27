@@ -14,6 +14,7 @@ export default function Home() {
     const { userIsAuthenticated, user, loading } = useAuthStore();
     const [authType, setAuthType] = useState<"Login" | "Sign up">("Login");
     const fetchAndSetMediaItems = useStore((state) => state.fetchAndSetMediaItems);
+    const mediaItems = useStore((state) => state.mediaItems);
 
     const handleAuthType = () => {
         setAuthType((prev) => (prev === "Login" ? "Sign up" : "Login"));
@@ -30,6 +31,15 @@ export default function Home() {
         animate: { opacity: 1, x: 0, transition: { duration: 1, ease: "easeInOut" } },
         exit: { opacity: 0, x: 50, transition: { duration: 1, ease: "easeInOut" } },
     };
+
+    const bookmarkedMovies = mediaItems.filter(
+        (item) => item.isBookmarked && item.category === "Movie"
+    );
+    const bookmarkedTV = mediaItems.filter(
+        (item) => item.isBookmarked && item.category === "TV Series"
+    );
+
+    const noBookmarks = bookmarkedMovies.length === 0 && bookmarkedTV.length === 0;
 
     return (
         <>
@@ -57,19 +67,54 @@ export default function Home() {
                                     element={
                                         <>
                                             <Carousel />
-                                            <MediaGrid pageTitle="Recommended for you" />
+                                            <MediaGrid
+                                                pageTitle="Recommended for you"
+                                                items={[...mediaItems].slice(6, 14)}
+                                            />
                                         </>
                                     }
                                 />
-                                <Route path="/movies" element={<MediaGrid pageTitle="Movies" />} />
-                                <Route path="/tv-shows" element={<MediaGrid pageTitle="TV Series" />} />
+                                <Route
+                                    path="/movies"
+                                    element={
+                                        <MediaGrid
+                                            pageTitle="Movies"
+                                            items={mediaItems.filter((item) => item.category === "Movie")}
+                                        />
+                                    }
+                                />
+                                <Route
+                                    path="/tv-shows"
+                                    element={
+                                        <MediaGrid
+                                            pageTitle="TV Series"
+                                            items={mediaItems.filter((item) => item.category === "TV Series")}
+                                        />
+                                    }
+                                />
                                 <Route
                                     path="/bookmarked"
                                     element={
-                                        <>
-                                            <MediaGrid pageTitle="Bookmarked Movies" />
-                                            <MediaGrid pageTitle="Bookmarked TV Series" />
-                                        </>
+                                        noBookmarks ? (
+                                            <p className="text-muted-foreground py-10">
+                                                No bookmarks found.
+                                            </p>
+                                        ) : (
+                                            <>
+                                                {bookmarkedMovies.length > 0 && (
+                                                    <MediaGrid
+                                                        pageTitle="Bookmarked Movies"
+                                                        items={bookmarkedMovies}
+                                                    />
+                                                )}
+                                                {bookmarkedTV.length > 0 && (
+                                                    <MediaGrid
+                                                        pageTitle="Bookmarked TV Series"
+                                                        items={bookmarkedTV}
+                                                    />
+                                                )}
+                                            </>
+                                        )
                                     }
                                 />
                             </Routes>

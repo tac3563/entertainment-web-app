@@ -3,48 +3,34 @@ import useStore from "../stores/store.ts";
 import MediaGridItem from "./MediaGridItem.tsx";
 import useAuthStore from "../stores/authStore.ts";
 
-type MediaGridProps = {
-  pageTitle: string;
-};
-
 const itemVariants = {
   hidden: { opacity: 0, scale: 0.95 },
   visible: { opacity: 1, scale: 1 },
   exit: { opacity: 0, scale: 0.95 },
 };
 
-export default function MediaGrid({ pageTitle }: MediaGridProps) {
-  const { mediaItems, toggleBookmark, searchInput } = useStore();
+type MediaGridProps = {
+  pageTitle: string;
+  items: {
+    id: string;
+    title: string;
+    category: string;
+    isBookmarked: boolean;
+    [key: string]: any;
+  }[];
+};
+
+export default function MediaGrid({ pageTitle, items }: MediaGridProps) {
+  const { toggleBookmark, searchInput } = useStore();
   const { user } = useAuthStore();
 
   if (!user) return null;
 
-  const filteredMediaItems = (() => {
-    switch (pageTitle) {
-      case "Movies":
-        return mediaItems.filter((item) => item.category === "Movie");
-      case "TV Series":
-        return mediaItems.filter((item) => item.category === "TV Series");
-      case "Bookmarked Movies":
-        return mediaItems.filter(
-            (item) => item.isBookmarked && item.category === "Movie"
-        );
-      case "Bookmarked TV Series":
-        return mediaItems.filter(
-            (item) => item.isBookmarked && item.category === "TV Series"
-        );
-      case "Recommended for you":
-        return [...mediaItems].slice(6, 14);
-      default:
-        return mediaItems;
-    }
-  })();
-
-  const searchResults = filteredMediaItems.filter((item) =>
+  const searchResults = items.filter((item) =>
       item.title.toLowerCase().includes(searchInput.toLowerCase())
   );
 
-  const itemsToShow = searchInput ? searchResults : filteredMediaItems;
+  const itemsToShow = searchInput ? searchResults : items;
 
   return (
       <div className="media-grid-container">
@@ -66,7 +52,7 @@ export default function MediaGrid({ pageTitle }: MediaGridProps) {
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
                   <MediaGridItem
-                      toggleBookmark={() => toggleBookmark(item.id, user?.uid)}
+                      toggleBookmark={() => toggleBookmark(item.id, user.uid)}
                       {...item}
                   />
                 </motion.li>
