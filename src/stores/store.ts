@@ -1,5 +1,4 @@
 import { create } from "zustand/react";
-import React from "react";
 import { fetchMediaItems } from "../api/tmdb";
 import { db } from "../firebaseConfig";
 import {
@@ -31,7 +30,7 @@ type MediaItem = {
 type StoreState = {
   mediaItems: MediaItem[];
   searchInput: string;
-  updateSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  updateSearch: (event: string) => void;
   toggleBookmark: (itemId: number, userId: string) => Promise<void>;
   fetchAndSetMediaItems: (userId?: string) => Promise<void>;
 };
@@ -40,8 +39,7 @@ const useStore = create<StoreState>((set, get) => ({
   mediaItems: [],
   searchInput: "",
 
-  updateSearch: (event) =>
-      set({ searchInput: event.target.value }),
+  updateSearch: (value: string) => set({ searchInput: value }),
 
   toggleBookmark: async (itemId, userId) => {
     const ref = doc(db, "bookmarks", userId);
