@@ -30,13 +30,15 @@ type StoreState = {
   searchInput: string;
   updateSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
   toggleBookmark: (itemId: number, userId: string) => Promise<void>;
-  setMediaItems: (items: MediaItem[]) => void;
+  appendMediaItems: (items: MediaItem[]) => void;
 };
 
 const useStore = create<StoreState>((set, get) => ({
   mediaItems: [],
   searchInput: "",
-  setMediaItems: (items: MediaItem[]) => set({ mediaItems: items }),
+  appendMediaItems: (items: MediaItem[]) =>
+      set((state) => ({ mediaItems: [...state.mediaItems, ...items] })),
+
 
   updateSearch: (event) =>
       set({ searchInput: event.target.value }),

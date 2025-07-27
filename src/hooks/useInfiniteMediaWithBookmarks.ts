@@ -1,16 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
-import useStore from "../stores/store.ts";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetchMediaItems } from "../api/tmdb";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
+import useStore from "../stores/store.ts";
 
-export function useFetchMediaWithBookmarks(userId?: string) {
-    const setMediaItems = useStore((state) => state.setMediaItems);
+export default function useInfiniteMediaWithBookmarks(userId?: string) {
+    const appendMediaItems = useStore((state) => state.appendMediaItems);
 
-    return useQuery({
+    return useInfiniteQuery({
         queryKey: ["mediaItems", userId],
-        queryFn: async () => {
-            const items = await fetchMediaItems();
+        initialPageParam: 1,
+        queryFn: async ({ pageParam }) => {
+            const items = await fetchMediaItems(pageParam);
 
             let bookmarkedIds: number[] = [];
             if (userId) {
@@ -28,10 +29,14 @@ export function useFetchMediaWithBookmarks(userId?: string) {
                 isBookmarked: bookmarkedIds.includes(item.id),
             }));
 
-            setMediaItems(merged);
+            appendMediaItems(merged);
 
-            return merged;
+            return {
+                items: merged,
+                nextPage: items.length < 20 ? undefined : pageParam + 1,
+            };
         },
+        getNextPageParam: (lastPage) => lastPage?.nextPage,
         enabled: !!userId,
         staleTime: 1000 * 60 * 5,
         refetchOnWindowFocus: false,

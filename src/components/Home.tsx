@@ -6,7 +6,7 @@ import Auth from "./Auth.tsx";
 import useAuthStore from "../stores/authStore.ts";
 import { Routes, Route } from "react-router-dom";
 import {  useState } from "react";
-import { useFetchMediaWithBookmarks } from "../hooks/useFetchMediaWithBookmarks";
+import useInfiniteMediaWithBookmarks from "../hooks/useInfiniteMediaWithBookmarks.ts";
 
 type AuthType = "Login" | "Sign up";
 type handleAuthType = () => void;
@@ -18,7 +18,7 @@ export default function Home() {
     setAuthType((prev) => (prev === "Login" ? "Sign up" : "Login"));
   };
 
-  useFetchMediaWithBookmarks(user?.uid);
+  useInfiniteMediaWithBookmarks(user?.uid);
 
   return (
     <>

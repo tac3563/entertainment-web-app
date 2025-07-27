@@ -21,11 +21,11 @@ type TmdbTV = {
 
 
 // Fetch movies and tv shows:
-export async function fetchMediaItems() {
+export async function fetchMediaItems(page = 1) {
   try {
     const [moviesRes, tvRes] = await Promise.all([
-      fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}`),
-      fetch(`${BASE_URL}/tv/popular?api_key=${API_KEY}`),
+      fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&page=${page}`),
+      fetch(`${BASE_URL}/tv/popular?api_key=${API_KEY}&page=${page}`),
     ]);
 
     if (!moviesRes.ok || !tvRes.ok) {
