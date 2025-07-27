@@ -16,7 +16,7 @@ export default function Search() {
           <input
             value={searchInput}
             onChange={(event) => updateSearch(event)}
-            className="text-preset-2-light"
+            className="w-full text-preset-2-light"
             type="search"
             placeholder="Search for movies or TV series"
           />

@@ -6,7 +6,7 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className="flex-center md:flex-col gap-[var(--spacing-900)] py-[var(--spacing-400)] px-[var(--spacing-300)] mb-[var(--spacing-400)] h-full bg-blue-900 rounded-[var(--rounded-3xl)]">
+      <nav className="side-nav flex-center md:flex-col gap-[var(--spacing-900)] py-[var(--spacing-400)] px-[var(--spacing-300)] mb-[var(--spacing-400)] bg-blue-900 rounded-[var(--rounded-3xl)]">
         <div>
           <svg width="33" height="27" xmlns="http://www.w3.org/2000/svg">
             <path

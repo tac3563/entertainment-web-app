@@ -134,4 +134,8 @@
             display: none;
         }
     }
+    
+    .side-nav {
+        min-height: 95vh;
+    }
 }
