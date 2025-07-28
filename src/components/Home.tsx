@@ -43,85 +43,88 @@ export default function Home() {
 
     return (
         <>
-            {!userIsAuthenticated && (
+            {!userIsAuthenticated ? (
                 <Auth authType={authType} handleAuthType={handleAuthType} />
+            ) : (
+                <>
+                    <aside>
+                        <NavBar />
+                    </aside>
+                    <main className="w-full">
+                        <Search />
+                        <section>
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={location.pathname}
+                                    variants={pageTransitionVariants}
+                                    initial="initial"
+                                    animate="animate"
+                                    exit="exit"
+                                    style={{ position: "relative" }}
+                                >
+                                    <Routes location={location} key={location.pathname}>
+                                        <Route
+                                            path="/"
+                                            element={
+                                                <>
+                                                    <Carousel />
+                                                    <MediaGrid
+                                                        pageTitle="Recommended for you"
+                                                        items={[...mediaItems].slice(6, 14)}
+                                                    />
+                                                </>
+                                            }
+                                        />
+                                        <Route
+                                            path="/movies"
+                                            element={
+                                                <MediaGrid
+                                                    pageTitle="Movies"
+                                                    items={mediaItems.filter((item) => item.category === "Movie")}
+                                                />
+                                            }
+                                        />
+                                        <Route
+                                            path="/tv-shows"
+                                            element={
+                                                <MediaGrid
+                                                    pageTitle="TV Series"
+                                                    items={mediaItems.filter((item) => item.category === "TV Series")}
+                                                />
+                                            }
+                                        />
+                                        <Route
+                                            path="/bookmarked"
+                                            element={
+                                                noBookmarks ? (
+                                                    <p className="text-muted-foreground py-10">
+                                                        No bookmarks found.
+                                                    </p>
+                                                ) : (
+                                                    <>
+                                                        {bookmarkedMovies.length > 0 && (
+                                                            <MediaGrid
+                                                                pageTitle="Bookmarked Movies"
+                                                                items={bookmarkedMovies}
+                                                            />
+                                                        )}
+                                                        {bookmarkedTV.length > 0 && (
+                                                            <MediaGrid
+                                                                pageTitle="Bookmarked TV Series"
+                                                                items={bookmarkedTV}
+                                                            />
+                                                        )}
+                                                    </>
+                                                )
+                                            }
+                                        />
+                                    </Routes>
+                                </motion.div>
+                            </AnimatePresence>
+                        </section>
+                    </main>
+                </>
             )}
-            <aside>
-                <NavBar />
-            </aside>
-            <main className="w-full">
-                <Search />
-                <section>
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={location.pathname}
-                            variants={pageTransitionVariants}
-                            initial="initial"
-                            animate="animate"
-                            exit="exit"
-                            style={{ position: "relative" }}
-                        >
-                            <Routes location={location} key={location.pathname}>
-                                <Route
-                                    path="/"
-                                    element={
-                                        <>
-                                            <Carousel />
-                                            <MediaGrid
-                                                pageTitle="Recommended for you"
-                                                items={[...mediaItems].slice(6, 14)}
-                                            />
-                                        </>
-                                    }
-                                />
-                                <Route
-                                    path="/movies"
-                                    element={
-                                        <MediaGrid
-                                            pageTitle="Movies"
-                                            items={mediaItems.filter((item) => item.category === "Movie")}
-                                        />
-                                    }
-                                />
-                                <Route
-                                    path="/tv-shows"
-                                    element={
-                                        <MediaGrid
-                                            pageTitle="TV Series"
-                                            items={mediaItems.filter((item) => item.category === "TV Series")}
-                                        />
-                                    }
-                                />
-                                <Route
-                                    path="/bookmarked"
-                                    element={
-                                        noBookmarks ? (
-                                            <p className="text-muted-foreground py-10">
-                                                No bookmarks found.
-                                            </p>
-                                        ) : (
-                                            <>
-                                                {bookmarkedMovies.length > 0 && (
-                                                    <MediaGrid
-                                                        pageTitle="Bookmarked Movies"
-                                                        items={bookmarkedMovies}
-                                                    />
-                                                )}
-                                                {bookmarkedTV.length > 0 && (
-                                                    <MediaGrid
-                                                        pageTitle="Bookmarked TV Series"
-                                                        items={bookmarkedTV}
-                                                    />
-                                                )}
-                                            </>
-                                        )
-                                    }
-                                />
-                            </Routes>
-                        </motion.div>
-                    </AnimatePresence>
-                </section>
-            </main>
         </>
     );
 }

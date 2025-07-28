@@ -25,7 +25,7 @@ export default function Auth({ authType, handleAuthType }: LoginProps) {
   };
 
   return (
-    <div className="absolute inset-0 flex items-center flex-col pt-[var(--spacing-1000)] gap-[var(--spacing-1000)]  bg-blue-950 z-10 ">
+    <div className="absolute inset-0 flex items-center flex-col px-[var(--spacing-300)] pt-[var(--spacing-1000)] gap-[var(--spacing-1000)]  bg-blue-950 z-10 ">
       <div>
         <img src="/assets/images/logo.svg" alt="app logo" />
       </div>
@@ -59,16 +59,16 @@ export default function Auth({ authType, handleAuthType }: LoginProps) {
             <h2 className="p-0 mb-10">{`${
               authType === "Login" ? "Login" : "Sign up"
             }`}</h2>
-            <div className="flex flex-col mb-10 gap-4">
+            <div className="flex flex-col mb-10">
               <input
-                className="border-b border-blue-500 pb-4 pl-4"
+                className="border-b border-blue-500 py-4 pl-4"
                 type="email"
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               <input
-                className="border-b border-blue-500 pb-4 pl-4"
+                className="border-b border-blue-500 py-4 pl-4"
                 type="password"
                 placeholder="Password"
                 value={password}
@@ -96,23 +96,23 @@ export default function Auth({ authType, handleAuthType }: LoginProps) {
         ) : authType === "Sign up" ? (
           <>
             <h2 className="p-0 mb-10">Login</h2>
-            <div className="flex flex-col mb-10 gap-4">
+            <div className="flex flex-col mb-10 ">
               <input
-                className="border-b border-blue-500 pb-4 pl-4"
+                className="border-b border-blue-500 py-4 pl-4"
                 type="email"
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               <input
-                className="border-b border-blue-500 pb-4 pl-4"
+                className="border-b border-blue-500 py-4 pl-4"
                 type="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
               <input
-                className="border-b border-blue-500 pb-4 pl-4"
+                className="border-b border-blue-500 py-4 pl-4"
                 type="password"
                 placeholder="Repeat Password"
                 value={repeatPassword}

@@ -10,7 +10,7 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 
-type MediaItem = {
+export type MediaItem = {
   id: number;
   title: string;
   year: number;

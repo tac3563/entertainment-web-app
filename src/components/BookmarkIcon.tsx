@@ -1,7 +1,7 @@
 type BookmarkIconProps = {
-  title: string;
-  isBookmarked: boolean;
-  toggleBookmark: (title: string) => void;
+    title: string;
+    isBookmarked: boolean;
+    toggleBookmark: (title: string) => void;
 };
 
 export default function BookmarkIcon({

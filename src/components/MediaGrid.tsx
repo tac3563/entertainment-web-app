@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import useStore from "../stores/store.ts";
 import MediaGridItem from "./MediaGridItem.tsx";
 import useAuthStore from "../stores/authStore.ts";
+import type { MediaItem } from "../stores/store.ts";
 
 const itemVariants = {
   hidden: { opacity: 0, scale: 0.95 },
@@ -11,13 +12,7 @@ const itemVariants = {
 
 type MediaGridProps = {
   pageTitle: string;
-  items: {
-    id: string;
-    title: string;
-    category: string;
-    isBookmarked: boolean;
-    [key: string]: any;
-  }[];
+  items: MediaItem[];
 };
 
 export default function MediaGrid({ pageTitle, items }: MediaGridProps) {
@@ -52,8 +47,8 @@ export default function MediaGrid({ pageTitle, items }: MediaGridProps) {
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
                   <MediaGridItem
-                      toggleBookmark={() => toggleBookmark(item.id, user.uid)}
                       {...item}
+                      toggleBookmark={() => toggleBookmark(item.id, user.uid)}
                   />
                 </motion.li>
             ))}
