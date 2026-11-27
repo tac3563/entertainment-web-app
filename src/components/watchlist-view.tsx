@@ -1,39 +1,62 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { MediaGrid, MediaGridSkeleton } from "@/components/media-grid";
+import Link from "next/link";
+import { MediaGrid, MediaGridSkeleton, Section } from "@/components/media-grid";
+import { site } from "@/config/site";
 import { useWatchlist } from "@/hooks/use-watchlist";
-import { filterByTitle } from "@/lib/filter-media";
 
 export function WatchlistView() {
   const { ready, items } = useWatchlist();
-  const query = useSearchParams().get("q")?.trim() ?? "";
 
-  if (!ready) return <MediaGridSkeleton title="Watchlist" />;
-
-  const results = filterByTitle(items, query);
-
-  if (query) {
-    return <MediaGrid title={`Found ${results.length} results for '${query}'`} items={results} />;
+  if (!ready) {
+    return (
+      <Section id="watchlist" as="h1" title={site.watchlist.nav}>
+        <MediaGridSkeleton count={4} />
+      </Section>
+    );
   }
 
   if (items.length === 0) {
     return (
-      <MediaGrid
-        title="Watchlist"
-        items={[]}
-        emptyMessage="Nothing saved yet. Tap the bookmark on any title to add it here."
-      />
+      <Section id="watchlist" as="h1" title={site.watchlist.nav}>
+        <MediaGrid
+          items={[]}
+          empty={
+            <>
+              Nothing saved yet. Press <span className="text-fg">+</span> on any title to keep it here.{" "}
+              <Link href="/" className="text-accent hover:text-accent-soft">
+                See what&apos;s trending
+              </Link>
+            </>
+          }
+        />
+      </Section>
     );
   }
 
-  const movies = results.filter((item) => item.category === "Movie");
-  const tv = results.filter((item) => item.category === "TV Series");
+  const movies = items.filter((item) => item.kind !== "tv");
+  const tv = items.filter((item) => item.kind === "tv");
 
   return (
-    <>
-      {movies.length > 0 && <MediaGrid title="Saved movies" items={movies} />}
-      {tv.length > 0 && <MediaGrid title="Saved TV series" items={tv} />}
-    </>
+    <div className="flex flex-col gap-14">
+      <div className="flex flex-col gap-2">
+        <h1 className="font-display text-[clamp(40px,5vw,64px)] leading-none font-extrabold tracking-[-0.045em]">
+          {site.watchlist.nav}
+        </h1>
+        <p className="text-muted">
+          {items.length} {items.length === 1 ? "title" : "titles"}, saved on this device.
+        </p>
+      </div>
+      {movies.length > 0 && (
+        <Section id="saved-movies" title="Movies">
+          <MediaGrid items={movies} />
+        </Section>
+      )}
+      {tv.length > 0 && (
+        <Section id="saved-tv" title="TV series">
+          <MediaGrid items={tv} />
+        </Section>
+      )}
+    </div>
   );
 }

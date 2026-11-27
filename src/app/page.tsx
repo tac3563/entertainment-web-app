@@ -1,38 +1,66 @@
 import { Suspense } from "react";
-import { MediaGrid, MediaGridSkeleton } from "@/components/media-grid";
-import { TrendingRail, TrendingRailSkeleton } from "@/components/trending-rail";
-import { filterByTitle, readQuery } from "@/lib/filter-media";
-import { getPopularMedia } from "@/lib/tmdb";
+import { FeaturedHero, FeaturedHeroSkeleton } from "@/components/featured-hero";
+import { FilterTabs } from "@/components/filter-tabs";
+import { MediaGrid, MediaGridSkeleton, Section } from "@/components/media-grid";
+import { TrendingRail } from "@/components/trending-rail";
+import { getPopular, getTrending } from "@/lib/tmdb";
+import type { MediaItem } from "@/types/media";
 
-export default function HomePage({ searchParams }: PageProps<"/">) {
+const HERO_COUNT = 4;
+
+// All data here is cached, so the whole page is prerendered and refreshed hourly.
+export default function HomePage() {
   return (
-    <Suspense
-      fallback={
-        <>
-          <TrendingRailSkeleton />
-          <MediaGridSkeleton title="Recommended for you" />
-        </>
-      }
-    >
-      <Home searchParams={searchParams} />
-    </Suspense>
+    <>
+      <Suspense fallback={<FeaturedHeroSkeleton />}>
+        <Trending />
+      </Suspense>
+      <Suspense
+        fallback={
+          <Section id="popular" title="Popular right now">
+            <MediaGridSkeleton />
+          </Section>
+        }
+      >
+        <Popular />
+      </Suspense>
+    </>
   );
 }
 
-async function Home({ searchParams }: Pick<PageProps<"/">, "searchParams">) {
-  const [params, media] = await Promise.all([searchParams, getPopularMedia()]);
-  const query = readQuery(params);
-
-  // Searching from home covers everything, not just the recommended slice.
-  if (query) {
-    const results = filterByTitle(media, query);
-    return <MediaGrid title={`Found ${results.length} results for '${query}'`} items={results} />;
-  }
+async function Trending() {
+  const trending = await getTrending();
+  const withOverview = trending.filter((item) => item.overview);
+  const hero = withOverview.slice(0, HERO_COUNT);
+  const rail = trending.filter((item) => !hero.includes(item)).slice(0, 12);
 
   return (
     <>
-      <TrendingRail items={media.slice(0, 5)} />
-      <MediaGrid title="Recommended for you" items={media.slice(6, 14)} />
+      <FeaturedHero items={hero} />
+      <Section id="trending" title="Trending this week">
+        <TrendingRail items={rail} startRank={hero.length + 1} />
+      </Section>
     </>
+  );
+}
+
+function interleave(a: MediaItem[], b: MediaItem[], count: number) {
+  return Array.from({ length: count }, (_, i) => (i % 2 ? b : a)[Math.floor(i / 2)]).filter(Boolean);
+}
+
+async function Popular() {
+  const [movies, tv] = await Promise.all([getPopular("movie", 1), getPopular("tv", 1)]);
+
+  return (
+    <Section id="popular" title="Popular right now">
+      <FilterTabs
+        label="Filter by type"
+        tabs={[
+          { id: "all", label: "All", content: <MediaGrid items={interleave(movies, tv, 12)} /> },
+          { id: "movie", label: "Movies", content: <MediaGrid items={movies.slice(0, 12)} /> },
+          { id: "tv", label: "TV series", content: <MediaGrid items={tv.slice(0, 12)} /> },
+        ]}
+      />
+    </Section>
   );
 }

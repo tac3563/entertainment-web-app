@@ -14,10 +14,18 @@ type TmdbImageProps = {
   alt: string;
   sizes: string;
   priority?: boolean;
+  className?: string;
 };
 
-export function TmdbImage({ path, alt, sizes, priority }: TmdbImageProps) {
-  if (!path) return <div className="absolute inset-0 bg-blue-900" aria-hidden />;
+export function TmdbImage({ path, alt, sizes, priority, className = "" }: TmdbImageProps) {
+  if (!path) {
+    return (
+      <div
+        className={`absolute inset-0 bg-[radial-gradient(90%_70%_at_78%_18%,rgb(164_173_255/0.18),transparent_60%)] bg-raised ${className}`}
+        aria-hidden
+      />
+    );
+  }
 
   return (
     <Image
@@ -27,7 +35,7 @@ export function TmdbImage({ path, alt, sizes, priority }: TmdbImageProps) {
       fill
       sizes={sizes}
       priority={priority}
-      className="object-cover"
+      className={`object-cover ${className}`}
     />
   );
 }
