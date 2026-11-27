@@ -1,14 +1,29 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { CategoryResults } from "@/components/category-results";
-import { MediaGridSkeleton } from "@/components/media-grid";
+import { MediaGrid, MediaGridSkeleton, Section } from "@/components/media-grid";
+import { getPopular } from "@/lib/tmdb";
 
-export const metadata: Metadata = { title: "TV Series" };
+export const metadata: Metadata = { title: "TV series" };
 
-export default function TvShowsPage({ searchParams }: PageProps<"/tv-shows">) {
+export default function TvShowsPage() {
   return (
-    <Suspense fallback={<MediaGridSkeleton title="TV Series" />}>
-      <CategoryResults category="TV Series" title="TV Series" searchParams={searchParams} />
+    <Suspense
+      fallback={
+        <Section id="tv" as="h1" title="Popular TV series">
+          <MediaGridSkeleton count={12} />
+        </Section>
+      }
+    >
+      <TvShows />
     </Suspense>
+  );
+}
+
+async function TvShows() {
+  const tv = await getPopular("tv");
+  return (
+    <Section id="tv" as="h1" title="Popular TV series">
+      <MediaGrid items={tv} />
+    </Section>
   );
 }

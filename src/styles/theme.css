@@ -1,162 +1,90 @@
+/* Midnight: one dark ground with a cool blue bias, a single periwinkle accent, and
+   artwork doing the colour work. Bricolage Grotesque for display, Geist for UI, Geist Mono for metadata. */
+
 @theme {
-    /* Font sizes */
-    --text-3xl: 32px;
-    --text-sm-base: 15px;
-    --text-xs-base: 13px;
-    --text-xxs: 11px;
+  --color-bg: #0a0c12;
+  --color-surface: #11141d;
+  --color-raised: #161b28;
+  --color-line: #1e2333;
+  --color-line-strong: #262c3d;
+  --color-fg: #eef0f6;
+  --color-fg-soft: #c3c8d6;
+  --color-muted: #9aa1b5;
+  --color-accent: #a4adff;
+  --color-accent-soft: #c9ceff;
 
-    /* Letter Spacing */
-    --tracking-tight: -0.03em;
+  --ease-out-expo: cubic-bezier(0.2, 0.7, 0.2, 1);
 
-    /* Colours */
-    --color-blue-950: #10141E;
-    --color-blue-900: #161D2F;
-    --color-blue-500: #5A698F;
-    --color-red-500: #FC4747;
-    --color-blue-500-50: rgba(22, 29, 47, 0.5);
+  --animate-rise: rise 0.7s var(--ease-out-expo) both;
+  --animate-fade-in: fade-in 0.4s var(--ease-out-expo) both;
 
-    /* Spacing */
-    --spacing-0: 0;
-    --spacing-100: 8px;
-    --spacing-200: 16px;
-    --spacing-300: 24px;
-    --spacing-400: 32px;
-    --spacing-500: 40px;
-    --spacing-600: 48px;
-    --spacing-700: 56px;
-    --spacing-900: 72px;
-    --spacing-1000: 80px;
-
-    /* Container Widths */
-    --max-w-7xl: 1440px;
-
-    /* Border */
-    --rounded-3xl: 20px;
-
-    /* Animation */
-    --animate-fade-in: fade-in 0.3s ease-out both;
-
-    /* Element Widths */
-    --carousel-max-width-mobile: 359px;
-    --carousel-max-width: 470px;
-    --modal-max-width: 400px;
-}
-
-@keyframes fade-in {
-    from { opacity: 0; transform: scale(0.97); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
+  @keyframes rise {
+    from {
+      opacity: 0.3;
+      transform: translateY(14px);
     }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Fonts come from next/font, which sets these variables on <html>. */
+@theme inline {
+  --font-display: var(--font-bricolage), system-ui, sans-serif;
+  --font-sans: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+:root {
+  --gutter: clamp(16px, 4vw, 48px);
+  color-scheme: dark;
+}
+
+@utility container-page {
+  max-width: 1360px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+@utility hide-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @layer base {
-    body {
-        font-family: var(--font-outfit), sans-serif;
-        @apply text-white bg-blue-950 px-[var(--spacing-400)] pt-[var(--spacing-400)];
-    }
+  body {
+    @apply bg-bg font-sans text-fg antialiased;
+    font-size: 15px;
+    line-height: 1.5;
+  }
 
-    h1 {
-        @apply text-xl leading-tight tracking-tight font-light;
-        @apply md:text-3xl  md:tracking-tighter py-[var(--spacing-500)]
-    }
-
-    h2 {
-        @apply text-xl leading-tight tracking-tight font-light;
-        @apply md:text-3xl  md:tracking-tighter py-[var(--spacing-500)]
-    }
-
-    h3 {
-        @apply text-sm-base leading-tight font-medium;
-        @apply md:text-lg
-    }
-
-    p, li, a {
-        @apply text-lg
-    }
-
-    a {
-        @apply text-red-500
-    }
-
-    button {
-        @apply rounded px-4 py-2 font-medium bg-red-500 text-white;
-    }
-    
-    body {
-        @apply md:px-[var(--spacing-500)] px-[var(--spacing-200)]
-    }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
 }
 
-@layer components {
-    .text-preset-1 {
-        @apply text-xl leading-tight tracking-tight font-light;
-        @apply md:text-3xl  md:tracking-tighter
-    }
-
-    .text-preset-2-md {
-        @apply text-base leading-tight font-light;
-        @apply md:text-2xl md:font-medium
-    }
-
-    .text-preset-2-light {
-        @apply text-base leading-tight font-light;
-        @apply md:text-2xl
-    }
-
-    .text-preset-3 {
-        @apply text-sm-base leading-tight  font-medium;
-        @apply md:text-lg
-    }
-
-    .text-preset-4 {
-        @apply text-sm-base leading-tight font-medium;
-        @apply md:text-sm-base md:font-light
-    }
-
-    .text-preset-5 {
-        @apply text-xs leading-tight font-light;
-        @apply md:text-xs-base
-    }
-
-    .btn-primary {
-        @apply bg-red-500 text-white rounded-md
-    }
-
-    .btn-secondary {
-        @apply bg-white text-blue-900 rounded-md
-    }
-}
-
-@layer utilities {
-    .flex-center {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .ratio-carousel {
-        aspect-ratio: 470/230;
-        object-fit: cover;
-        object-position: center;
-    }
-
-    .hide-scrollbar {
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-    }
-    
-    .side-nav {
-        @media(min-width: 768px) {
-            min-height: 95vh;
-        }
-    }
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

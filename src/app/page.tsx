@@ -1,38 +1,33 @@
 import { Suspense } from "react";
-import { MediaGrid, MediaGridSkeleton } from "@/components/media-grid";
-import { TrendingRail, TrendingRailSkeleton } from "@/components/trending-rail";
-import { filterByTitle, readQuery } from "@/lib/filter-media";
-import { getPopularMedia } from "@/lib/tmdb";
+import { MediaGrid, MediaGridSkeleton, Section } from "@/components/media-grid";
+import { getPopular } from "@/lib/tmdb";
 
-export default function HomePage({ searchParams }: PageProps<"/">) {
+// All data here is cached, so the whole page is prerendered and refreshed hourly.
+export default function HomePage() {
   return (
     <Suspense
       fallback={
-        <>
-          <TrendingRailSkeleton />
-          <MediaGridSkeleton title="Recommended for you" />
-        </>
+        <Section id="popular-movies" as="h1" title="Popular movies">
+          <MediaGridSkeleton />
+        </Section>
       }
     >
-      <Home searchParams={searchParams} />
+      <Popular />
     </Suspense>
   );
 }
 
-async function Home({ searchParams }: Pick<PageProps<"/">, "searchParams">) {
-  const [params, media] = await Promise.all([searchParams, getPopularMedia()]);
-  const query = readQuery(params);
-
-  // Searching from home covers everything, not just the recommended slice.
-  if (query) {
-    const results = filterByTitle(media, query);
-    return <MediaGrid title={`Found ${results.length} results for '${query}'`} items={results} />;
-  }
+async function Popular() {
+  const [movies, tv] = await Promise.all([getPopular("movie", 1), getPopular("tv", 1)]);
 
   return (
     <>
-      <TrendingRail items={media.slice(0, 5)} />
-      <MediaGrid title="Recommended for you" items={media.slice(6, 14)} />
+      <Section id="popular-movies" as="h1" title="Popular movies">
+        <MediaGrid items={movies.slice(0, 8)} />
+      </Section>
+      <Section id="popular-tv" title="Popular TV series">
+        <MediaGrid items={tv.slice(0, 8)} />
+      </Section>
     </>
   );
 }
