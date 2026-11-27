@@ -33,15 +33,30 @@
     /* Border */
     --rounded-3xl: 20px;
 
+    /* Animation */
+    --animate-fade-in: fade-in 0.3s ease-out both;
+
     /* Element Widths */
     --carousel-max-width-mobile: 359px;
     --carousel-max-width: 470px;
     --modal-max-width: 400px;
 }
 
+@keyframes fade-in {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
 @layer base {
     body {
-        font-family: 'Outfit', sans-serif;
+        font-family: var(--font-outfit), sans-serif;
         @apply text-white bg-blue-950 px-[var(--spacing-400)] pt-[var(--spacing-400)];
     }
 
