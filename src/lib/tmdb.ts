@@ -97,3 +97,17 @@ export async function getPopular(kind: MediaKind, pages = 2): Promise<MediaItem[
     .filter((r) => !seen.has(r.id) && seen.add(r.id))
     .map((r) => toMediaItem(r, kind, genres));
 }
+
+/** Searches all of TMDb for films and TV. Each query is cached for an hour. */
+export async function searchMedia(query: string): Promise<MediaItem[]> {
+  "use cache";
+  cacheLife("hours");
+
+  const [page, genres] = await Promise.all([
+    tmdb<Page>("/search/multi", { query, include_adult: "false" }),
+    getGenres(),
+  ]);
+  return page.results
+    .filter((r) => isMediaKind(r.media_type))
+    .map((r) => toMediaItem(r, r.media_type as MediaKind, genres));
+}

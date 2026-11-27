@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 import { LogoMark } from "@/components/icons";
+import { SearchBox, SearchBoxSkeleton } from "@/components/search-box";
 import { site } from "@/config/site";
 import { useWatchlist } from "@/hooks/use-watchlist";
 
@@ -48,6 +50,12 @@ export function SiteHeader() {
           )}
         </NavLink>
       </nav>
+
+      <div className="w-full md:ml-auto md:w-auto md:max-w-[380px] md:flex-[1_1_260px]">
+        <Suspense fallback={<SearchBoxSkeleton />}>
+          <SearchBox />
+        </Suspense>
+      </div>
     </header>
   );
 }
