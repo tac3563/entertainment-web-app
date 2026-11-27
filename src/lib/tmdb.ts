@@ -64,6 +64,21 @@ function toMediaItem(r: TmdbResult, kind: MediaKind, genres: Record<string, stri
   };
 }
 
+function isMediaKind(value: string | undefined): value is MediaKind {
+  return value === "movie" || value === "tv";
+}
+
+/** TMDb's weekly trending list, films and TV mixed. Titles without artwork are skipped. */
+export async function getTrending(): Promise<MediaItem[]> {
+  "use cache";
+  cacheLife("hours");
+
+  const [page, genres] = await Promise.all([tmdb<Page>("/trending/all/week"), getGenres()]);
+  return page.results
+    .filter((r) => isMediaKind(r.media_type) && r.backdrop_path)
+    .map((r) => toMediaItem(r, r.media_type as MediaKind, genres));
+}
+
 /** The first `pages` pages (20 each) of popular movies or TV, de-duplicated. */
 export async function getPopular(kind: MediaKind, pages = 2): Promise<MediaItem[]> {
   "use cache";
